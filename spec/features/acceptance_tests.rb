@@ -45,10 +45,23 @@ describe "Static Pages" do
       expect(page).to have_field('home_text')
     end
 
-    describe "when 'Hello, world!' is input into the text box" do
-      it "has the content 'Hello, world!'" do
-        fill_in 'home_text', with: 'Hello, world!'
+    describe "when text is input into the text box" do
+      it "with default text factory has the content 'Hello, world!'" do
+        @text = create(:text_string)
+        fill_in 'home_text', with: @text.text
         expect(page).to have_field('home_text', with: 'Hello, world!')
+      end
+
+      it "with uppercase text factory has the content 'HELLO, WORLD!'" do
+        @text = create(:uppercase)
+        fill_in 'home_text', with: @text.text
+        expect(page).to have_field('home_text', with: 'HELLO, WORLD!')
+      end
+
+      it "with overridden text factory has the content 'BROADCAST SIGNAL HIJACKED'" do
+        @text = create(:text_string, text: 'BROADCAST SIGNAL HIJACKED')
+        fill_in 'home_text', with: @text.text
+        expect(page).to have_field('home_text', with: 'BROADCAST SIGNAL HIJACKED')
       end
     end
   end
